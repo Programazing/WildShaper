@@ -1,0 +1,6 @@
+@WildShaper.API_HostAddress = http://localhost:5100
+
+GET {{WildShaper.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
