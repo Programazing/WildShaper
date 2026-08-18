@@ -1,41 +1,51 @@
+using System.Text.Json;
+using FastEndpoints;
+using FastEndpoints.Swagger;
+using Scalar.AspNetCore;
+using WildShaper.Api.Common.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddWildShaperApi();
+
+builder.Services.AddFastEndpoints();
+builder.Services.SwaggerDocument();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("WildShaperWeb", policy =>
+    {
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>() ?? [];
+
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+app.UseCors("WildShaperWeb");
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
+app.UseFastEndpoints(config =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    config.Serializer.Options.PropertyNamingPolicy =
+        JsonNamingPolicy.CamelCase;
+});
 
-app.MapGet("/weatherforecast", () =>
+app.UseSwaggerGen(options =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    options.Path = "/openapi/{documentName}.json";
+});
+
+app.MapScalarApiReference(options =>
+{
+    options.Title = "WildShaper API";
+    options.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+});
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+public partial class Program;
