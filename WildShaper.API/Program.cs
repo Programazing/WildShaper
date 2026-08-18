@@ -1,6 +1,7 @@
 using System.Text.Json;
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 using WildShaper.Api.Common.DependencyInjection;
 
@@ -10,6 +11,7 @@ builder.Services.AddWildShaperApi();
 
 builder.Services.AddFastEndpoints();
 builder.Services.SwaggerDocument();
+builder.Services.AddHealthChecks();
 
 builder.Services.AddCors(options =>
 {
@@ -44,6 +46,11 @@ app.MapScalarApiReference(options =>
 {
     options.Title = "WildShaper API";
     options.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+});
+
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false
 });
 
 app.Run();
