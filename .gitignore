@@ -1,5 +1,91 @@
-bin/
-obj/
-/packages/
-riderModule.iml
-/_ReSharper.Caches/
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+artifacts/
+TestResults/
+[Bb]uild[Ll]og.*
+
+# .NET tooling
+*.user
+*.userosscache
+*.suo
+*.rsuser
+*.sln.docstates
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+project.lock.json
+
+# NuGet
+packages/
+.nuget/
+
+# Visual Studio
+.vs/
+
+# JetBrains Rider / ReSharper
+.idea/
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Visual Studio Code
+.vscode/
+
+# Blazor / ASP.NET Core generated assets
+wwwroot/dist/
+wwwroot/css/site.min.css
+wwwroot/js/site.min.js
+
+# Local configuration and secrets
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+*.secrets.json
+.env
+.env.*
+!.env.example
+
+# Local databases, volumes, and backups
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+postgres-data/
+data/postgres/
+*.dump
+*.sql.bak
+
+# Logs and diagnostics
+logs/
+*.log
+*.log.*
+crashdump.*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Coverage and test reports
+coverage/
+coverage*/
+*.coverage
+*.coveragexml
+*.trx
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
